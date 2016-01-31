@@ -60,6 +60,18 @@ Advisory Third Party CI
 
     * one word at a time
 
+Advisory Third Party CI
+=======================
+
+* CI
+* Third Party
+* Advisory
+
+
+.. note::
+
+    * one word at a time
+
 
 OpenStack Infrastructure
 ========================
