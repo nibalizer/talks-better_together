@@ -93,7 +93,9 @@ An average day
 ==============
 
 D1: All the tests are failing
+
 D2: Yep, fog released and now everything is bad
+
 D1: ...
 
 
@@ -101,12 +103,14 @@ Why do this
 ===========
 
 "Not using a local repo is like having unprotected sex with the internet"
+
 -ACS
 
 Sysadmins
 =========
 
 "Why would you upgrade anything EVER?!?!?"
+
 -James Mickens
 
 
@@ -115,19 +119,20 @@ The Point
 
 Code you use will break less
 
+The Point
+=========
+
+Code you use will break, *you* less
+
 
 
 Testing Order
 =============
 
-* 1st Order
-  * my code, my test, my testing
-* 2nd Order
-  * your code, your test, my testing
-* 3rd Order
-  * my code, my other code, my test, my testing
-* 4th Order
-  * your code, my code, my test, my testing
+* 1st Order: my code, my test, my testing
+* 2nd Order: your code, your test, my testing
+* 3rd Order: my code, my other code, my test, my testing
+* 4th Order: your code, my code, my test, my testing
 
 .. note::
 
