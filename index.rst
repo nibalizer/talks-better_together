@@ -50,6 +50,24 @@ Agenda
 
    * Not a super new idea
 
+
+Other People
+============
+
+* Jim Blair
+* Anita Kuno
+* Mike Perez
+* Hunter Haugen
+* Bryan Jen
+* Emilien Macchi
+* Daniele Sluijters
+* Many More
+
+.. note::
+
+   * Not a super new idea
+
+
 Topic
 =====
 
@@ -60,17 +78,43 @@ Advisory Third Party CI
 
     * one word at a time
 
-Advisory Third Party CI
-=======================
 
-* CI
-* Third Party
-* Advisory
+Example
+=======
 
+#TODO picture of pcci voting on puppetlabs-haproxy
 
 .. note::
 
-    * one word at a time
+    * running live
+
+
+An average day
+==============
+
+D1: All the tests are failing
+D2: Yep, fog released and now everything is bad
+D1: ...
+
+
+Why do this
+===========
+
+"Not using a local repo is like having unprotected sex with the internet"
+-ACS
+
+Sysadmins
+=========
+
+"Why would you upgrade anything EVER?!?!?"
+-James Mickens
+
+
+The Point
+=========
+
+Code you use will break less
+
 
 
 Testing Order
