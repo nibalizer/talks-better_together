@@ -202,6 +202,18 @@ OpenStack Infrastructure
     * Jobs, test, integration, docs, release, translate
 
 
+OpenStack CI Neat features
+==========================
+
+
+* Linearlized merge queue
+* Gate collections
+* Depends-On
+* Docs only patches
+* Releases
+
+
+
 Thank You
 =========
 
