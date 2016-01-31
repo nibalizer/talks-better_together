@@ -67,6 +67,15 @@ Other People
 
    * Not a super new idea
 
+CI Definition
+=============
+
+Good idea: Run tests
+
+Better idea: Run tests for every pull request
+
+Best idea: Don't merge code unless tests pass
+
 
 Topic
 =====
@@ -123,6 +132,16 @@ The Point
 =========
 
 Code you use will break, *you* less
+
+
+Setting up a test for a library
+===============================
+
+1) Follow pull requests on that library
+2) Pull library from git into test env
+3) Pull code from a project that uses library, where the project is known to pass tests
+4) Run the projects tests.
+5) Report the results as CI information for library
 
 
 
