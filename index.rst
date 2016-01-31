@@ -73,6 +73,17 @@ Advisory Third Party CI
     * one word at a time
 
 
+Testing Order
+=============
+
+* 1st Order
+  * my code, my test, my testing
+* 2nd Order
+  * your code, your test, my testing
+* 3rd Order
+  * your code, my code, my test, my testing
+
+
 OpenStack Infrastructure
 ========================
 
