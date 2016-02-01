@@ -324,6 +324,14 @@ Github Balls
     * Requires pygithub from git master
 
 
+Issues with Github
+==================
+
+* Non-owner hooks
+* Not enough granularity in ci reporting
+* Comments Suck
+
+
 OpenStack CI Neat features
 ==========================
 
