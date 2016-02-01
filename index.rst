@@ -138,11 +138,11 @@ Pausing
 An average day
 ==============
 
-D1: All the tests are failing
+Dev1: All the tests are failing
 
-D2: Yep, fog released and now everything is bad
+Dev2: Yep, fog released and now everything is bad
 
-D1: ...
+Dev1: ...
 
 
 Why do this
