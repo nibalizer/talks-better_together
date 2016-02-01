@@ -297,7 +297,7 @@ extensions += [
     'hieroglyph',
 ]
 
-slide_title = 'Advisory Third Party CI'
+slide_title = 'Better Together'
 slide_theme = 'single-level'
 slide_levels = 3
 
