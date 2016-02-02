@@ -480,6 +480,7 @@ Run_all.sh
 
 
 .. code-block:: shell
+
     cd $SYSTEM_CONFIG
     git fetch -a && git reset -q --hard @{u}
     ./install_modules.sh
