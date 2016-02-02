@@ -48,6 +48,15 @@ Other People
 
    * Team effort
 
+Agenda
+======
+
+* Introduction
+* Describe OpenStack Infra Team and Infrastructure
+* Describe Puppet use
+* Describe Ansible use
+* Describe the Ansible-Puppet collaboration
+
 
 OpenStack Infrastructure
 ========================
@@ -146,6 +155,22 @@ Basics
     * HP has donated a blob of physical gear which we are clouding
     * Run our services on the public internet
 
+
+Mgmt
+====
+
+* Precise, Trusty, Centos 7
+* Puppet for config mgmt
+* Ansible for orchestration
+* Disk-image-builder for image builds
+* snmp + cacti for metrics
+* puppetboard for visibility
+
+
+.. note::
+    * Precise, trusty, centos 7
+    * Centos 6 was killed
+
 Puppet circa 2014
 =================
 
@@ -193,6 +218,25 @@ Example of where we were at
 .. note::
     * Some but not all of the terribleness has been preserved
     * run this in prod
+
+Example of where we were at
+==========================
+
+.. code-block:: shell
+
+    # upstream is currently looking for /run/systemd files to check
+    # for systemd.  This fails in a chroot where /run isn't mounted
+    # (like when using dib).  Comment out this confine as fedora
+    # always has systemd
+    #  see
+    #   https://github.com/puppetlabs/puppet/pull/4481
+    #   https://bugzilla.redhat.com/show_bug.cgi?id=1254616
+    sudo sed -i.bak  '/^[^#].*/ s|\(^.*confine :exists => \"/run/systemd/system\".*$\)|#\ \1|' \
+        /usr/share/ruby/vendor_ruby/puppet/provider/service/systemd.rb
+
+.. note::
+    * Puppet 4 on f23
+    * A user level patch to software that was patched before being packaged
 
 
 Upgrades to the puppet setup
@@ -245,6 +289,35 @@ Upgrades to the puppet setup: OpenStackCI
     * Open source when you get users
     * Wraps Daemons and configuration
     * All-in-one node deployment
+
+
+Upgrades to the puppet setup: Public Hiera
+==========================================
+
+.. code-block:: shell
+
+    commit 1624692402d2148ab7d6dd9e5642fb0b34ec7209
+    Author: Spencer Krum <nibz@spencerkrum.com>
+    Date:   Fri Apr 24 08:36:46 2015 -0700
+
+        Convert hiera configuration to support public data
+        
+        This moves the hiera root under /opt/system-config so it can reach
+        into both private and public hiera directories. This implies that
+        hiera data will live in a hiera/ directory in system-config.
+        
+        Manual: This requires a manual change to the puppetmaster system. A
+        rooter must move /etc/puppet/hieradata to /opt/system-config/hieradata
+        
+        Spec: http://specs.openstack.org/openstack-infra/infra-specs/specs/public_hiera.html
+        
+        Change-Id: I1736759ee9ac7cd0c206538ed0a2f6d0d71ea440
+
+
+.. note::
+    * Split Data from code
+    * Increase visibility
+    * Reduces merge conflicts
 
 
 Need basic orchestration
@@ -322,6 +395,111 @@ Puppet Inventory
     print json.dumps(data, sort_keys=True, indent=2)
 
 
+.. note::
+    * Ansible dynamic inventory
+    * Reads puppet cert --list --all
+
+
+
+OpenStack Inventory
+===================
+
+.. code-block:: shell
+
+    commit 714c934d0c57ed4c4ce653c0bb603071fc3dbff6
+    Author: Monty Taylor <mordred@inaugust.com>
+    Date:   Wed Nov 25 11:36:30 2015 -0500
+
+        Use OpenStack for inventory instead of puppet
+        
+        With the puppetmaster not there anymore, we should consume inventory
+        from OpenStack rather than from puppet.
+        
+        It turns out that because of the way static and dynamic inventories get
+        merged, the static file needs to stand alone. SO - if you need to
+        disable a dynamic host from OpenStack (pretty much all of our hosts) you
+        need to not only add it to dynamic:children, you need to add an emtpy
+        group into the static file too, otherwise you'll get an error like:
+        
+         root@puppetmaster:~# ansible -i newinv '!disabled' --list-hosts
+         ERROR: newinv/static:4: child group is not defined: (jenkins-dev.openstack.org)
+        
+        Change-Id: Ic6809ed0b7014d7aebd414bf3a342e3a37eb10b6
+
+.. note::
+    * Ansible 2.0 released
+    * Uses shade, a library we wrote
+    * This inventory file lives in ansible/contrib
+    * Start a really fucking annoying process of getting us the ability to disable a host temporarily
+
+
+Ansible's Role
+==============
+
+* Ad hoc
+* Jenkins 'Maintenance'
+* Upgrades (see references)
+* Puppet Runs
+
+
+.. note::
+    * get it?
+    * Upgraded our elasticsearch cluster using ansible, through code review
+
+
+Jenkins Maintenance
+===================
+
+.. code-block:: yaml
+
+    ---
+    - hosts: 'jenkins0*.openstack.org'
+      # Do the entire play completely for one host at a time
+      serial: 1
+      # Treat any errors as fatal so that we don't stop all the jenkins
+      # masters.
+      any_errors_fatal: true
+      tasks:
+        - shell: '/usr/local/jenkins/bin/safe_jenkins_shutdown --url https://{{ ansible_fqdn }}/ --user {{ user }} --password {{ password }}'
+        - service: name=jenkins state=stopped
+          # This is necessary because stopping Jenkins is not reliable.
+          # We allow return code 1 which means no processes found.
+        - shell: 'pkill -9 -U jenkins || [ $? -eq "1" ]'
+        - service: name=jenkins state=restarted
+
+
+
+.. note::
+    * On cron once a week
+    * This, and all ansible runs, run from one host, the puppetmaster
+    * Bastion model
+
+
+Run_all.sh
+==========
+
+
+.. code-block:: shell
+    cd $SYSTEM_CONFIG
+    git fetch -a && git reset -q --hard @{u}
+    ./install_modules.sh
+    ansible-galaxy install --force -r roles.yaml
+
+    # First, sync the puppet repos with all the machines
+    ansible-playbook -f 20 ${ANSIBLE_PLAYBOOKS}/update_puppet.yaml
+    # Run the git/gerrit sequence, since it's important that they all work together
+    ansible-playbook -f 10 ${ANSIBLE_PLAYBOOKS}/remote_puppet_git.yaml
+    # Run AFS changes separately so we can make sure to only do one at a time
+    # (turns out quorum is nice to have)
+    ansible-playbook -f 1 ${ANSIBLE_PLAYBOOKS}/remote_puppet_afs.yaml
+    # Run everything else. We do not care if the other things worked
+    ansible-playbook -f 20 ${ANSIBLE_PLAYBOOKS}/remote_puppet_else.yaml
+
+.. note::
+    * Every 15 minutes by cron
+    * Flocking in the cron, this can certainly take longer than 15 minutes 
+    * Think about this relatively infrequently -> CI
+
 
 References
 ==========
@@ -330,13 +508,16 @@ References
 * Main Control repo: http://git.openstack.org/cgit/openstack-infra/system-config
 * Apply test: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
 * OpenStack CI http://docs.openstack.org/infra/openstackci/
+* Diskimage-Builder http://docs.openstack.org/developer/diskimage-builder/
+* ELK Upgrade Playbook: https://review.openstack.org/#/c/238185/
 
 
 References: shas
 ================
 
-* Drive puppet from ssh edaa31ebbda09fb03baf1d18b64f5fa996188745
+* Drive puppet from ssh: edaa31ebbda09fb03baf1d18b64f5fa996188745
 * Move from ssh to ansible: 034f37c32aed27d8000e1dc3a8a3d36022bcd12a
+* Public hiera: 1624692402d2148ab7d6dd9e5642fb0b34ec7209
 
 
 
