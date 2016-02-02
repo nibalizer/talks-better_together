@@ -232,8 +232,9 @@ Example of where we were at
     #  see
     #   https://github.com/puppetlabs/puppet/pull/4481
     #   https://bugzilla.redhat.com/show_bug.cgi?id=1254616
-    sudo sed -i.bak  '/^[^#].*/ s|\(^.*confine :exists => \"/run/systemd/system\".*$\)|#\ \1|' \
-        /usr/share/ruby/vendor_ruby/puppet/provider/service/systemd.rb
+    sudo sed -i.bak  \
+    '/^[^#].*/ s|\(^.*confine :exists => \"/run/systemd/system\".*$\)|#\ \1|' \
+    /usr/share/ruby/vendor_ruby/puppet/provider/service/systemd.rb
 
 .. note::
     * Puppet 4 on f23
@@ -572,13 +573,6 @@ Post report and facts to puppetdb
 ==================================
 
 .. code-block:: yaml
-
-  - name: find logs
-    shell: "ls -tr reports/{{ ansible_fqdn }}/*_puppetdb.json"
-    register: files
-
-  - name: set log filename
-    set_fact: puppet_logfile="{{ files.stdout_lines|sort|last }}"
 
   - name: fetch file
     synchronize:
