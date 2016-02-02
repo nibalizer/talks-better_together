@@ -182,10 +182,21 @@ Upgrades to the puppet setup
     * install_modules.sh was sortof r10kish
     * public modules were all really old versions
 
-Upgrades to the puppet setup
-============================
+Upgrades to the puppet setup: Apply test
+========================================
 
 * Apply test http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
+
+.. code-block:: shell
+
+    file=$1
+    fileout=${file}.out
+    echo "##" > $fileout
+    cat $file > $fileout
+    sudo puppet apply --noop --verbose --debug $file >/dev/null 2>> $fileout
+    ret=$?
+    cat $fileout
+    exit $ret
 
 .. note::
     * 3.x happened right as 2.7 Eol'd for the last time
@@ -194,10 +205,26 @@ Upgrades to the puppet setup
     * install_modules.sh was sortof r10kish
     * public modules were all really old versions
 
+Upgrades to the puppet setup: OpenStackCI
+=========================================
+
+* Control Repo Indirector
+* Puppet module
+
+.. note::
+    * Open Source when you release
+    * Open source when you get users
+    * Wraps Daemons and configuration
+    * All-in-one node deployment
+
+
+
 References
 ==========
 
-* http://git.openstack.org/cgit/openstack-infra/
+* All infra repos: http://git.openstack.org/cgit/openstack-infra/
+* Apply test: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
+* OpenStack CI http://docs.openstack.org/infra/openstackci/
 
 
 Thank You
