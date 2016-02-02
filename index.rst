@@ -573,7 +573,7 @@ Post report and facts to puppetdb
 .. code-block:: yaml
 
   - name: find logs
-    shell: "ls -tr /var/lib/puppet/reports/{{ ansible_fqdn }}/*_puppetdb.json"
+    shell: "ls -tr reports/{{ ansible_fqdn }}/*_puppetdb.json"
     register: files
 
   - name: set log filename
@@ -593,6 +593,14 @@ Post report and facts to puppetdb
       whoami: "{{ ansible_fqdn }}"
     delegate_to: localhost
     connection: local
+
+
+PuppetBoard
+===========
+
+
+.. figure:: _static/puppetboard.jpg
+   :align: center
 
 
 
