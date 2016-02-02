@@ -103,6 +103,20 @@ Secondary Services
     * Lot of community involvment here
 
 
+Codesearch
+==========
+
+.. figure:: _static/codesearch.jpg
+   :align: center
+
+* http://codesearch.openstack.org
+
+.. note::
+    * codesearch.openstack.org
+    * hound from etsy
+    * deployed by outreachy intern
+    * use our puppet module!
+
 Basics
 ======
 
@@ -128,7 +142,56 @@ Basics
 .. note::
     * Maybe yours
     * HP has donated a blob of physical gear which we are clouding
+    * Run our services on the public internet
 
+Puppet circa 2014
+=================
+
+* 2.7 Master
+* Passenger
+* Generated certs, w/ push
+* CI/CD
+* install_modules.sh
+* puppet-lint test
+* some public modules
+* single puppet repo
+
+.. note::
+    * Single puppetmaster
+    * launch_node.py would build a machine w/ openstack apis and push in a puppet cert
+    * near-perfect cd
+    * install_modules.sh was sortof r10kish
+    * public modules were all really old versions
+    * public internet, rouge puppet certs
+
+
+Upgrades to the puppet setup
+============================
+
+* 3.x
+* PuppetDB + PuppetBoard
+* Modules split out
+* Started using newer public modules
+* Upgraded apache
+
+.. note::
+    * 3.x happened right as 2.7 Eol'd for the last time
+    * launch_node.py would build a machine w/ openstack apis and push in a puppet cert
+    * near-perfect cd
+    * install_modules.sh was sortof r10kish
+    * public modules were all really old versions
+
+Upgrades to the puppet setup
+============================
+
+* Apply test http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
+
+.. note::
+    * 3.x happened right as 2.7 Eol'd for the last time
+    * launch_node.py would build a machine w/ openstack apis and push in a puppet cert
+    * near-perfect cd
+    * install_modules.sh was sortof r10kish
+    * public modules were all really old versions
 
 References
 ==========
