@@ -37,6 +37,7 @@ Portland
 Other People
 ============
 
+* OpenStack Infra Team
 * Jim Blair
 * Monty Taylor
 * Colleen Murphy
@@ -59,18 +60,6 @@ OpenStack Infrastructure
     * 20k tests a day at peak times
     * Jobs, test, integration, docs, release, translate
 
-
-Basics
-======
-
-* 30 'pets'
-* 12 x jenkins masters
-* 20 x package mirrors
-* 8 x git mirrors
-* ~30 elk cluster
-* infinity test vms
-
-
 History
 =======
 
@@ -82,6 +71,63 @@ History
     * pre ansible (python shop)
     * tried chef, hard
     * went with puppet
+
+Primary Services
+================
+
+* Code Review (gerrit)
+* CI (zomg complexity)
+* Code hosting (haproxy/cgit farm)
+* Mailing lists(mailman)
+
+.. note::
+    * These are the things that we really need to be up
+    * Our CI system is home grown and awesome
+
+Secondary Services
+==================
+
+* wiki
+* ask.openstack.org
+* mailing lists
+* afs/kerberos
+* irc bots
+* paste
+* etherpad
+* elk
+* zanata
+* graphite/grafana/grafyaml
+
+.. note::
+    * These are the things that got set up
+    * Lot of community involvment here
+
+
+Basics
+======
+
+* 30 'pets'
+* 12 x jenkins masters
+* 20 x package mirrors
+* 8 x git mirrors
+* ~30 elk cluster
+* infinity test vms
+
+.. note::
+    * These are the things that got set up
+    * Lot of community involvment here
+
+Basics
+======
+
+* All infrastructure runs on OpenStack clouds
+* Clouds donated by companies <3
+* Rackspace and HPCloud at first
+* Now involving BlueBox, OVH, Internap and more
+
+.. note::
+    * Maybe yours
+    * HP has donated a blob of physical gear which we are clouding
 
 
 References
