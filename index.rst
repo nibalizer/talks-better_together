@@ -170,6 +170,7 @@ Mgmt
 .. note::
     * Precise, trusty, centos 7
     * Centos 6 was killed
+    * Puppet does all configuration of everything, services, files, templates, packages
 
 Puppet circa 2014
 =================
@@ -603,6 +604,12 @@ PuppetBoard
    :align: center
 
 
+Next Steps
+==========
+
+* Shore up the puppetdb integration, has some bugs
+* Move launch_node.py into ansible
+* Remove puppet agent dependency for launch_node.py, disable puppetmaster service
 
 
 References
