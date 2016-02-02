@@ -60,6 +60,30 @@ OpenStack Infrastructure
     * Jobs, test, integration, docs, release, translate
 
 
+Basics
+======
+
+* 30 'pets'
+* 12 x jenkins masters
+* 20 x package mirrors
+* 8 x git mirrors
+* ~30 elk cluster
+* infinity test vms
+
+
+History
+=======
+
+* Started 5 years ago
+* Open Source
+
+.. note::
+    * pleia jim/monty sitck figures
+    * pre ansible (python shop)
+    * tried chef, hard
+    * went with puppet
+
+
 References
 ==========
 
