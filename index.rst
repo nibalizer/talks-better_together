@@ -435,6 +435,26 @@ OpenStack Inventory
     * Start a really fucking annoying process of getting us the ability to disable a host temporarily
 
 
+Ansible group membership
+========================
+
+.. code-block:: shell
+
+    jenkins jenkins*.openstack.org
+    logstash-worker ~logstash-worker\d+\.openstack\.org
+    subunit-worker ~subunit-worker\d+\.openstack\.org
+    elasticsearch ~elasticsearch0[1-7]\.openstack\.org
+    git-loadbalancer ~git(-fe\d+)?\.openstack\.org
+    disabled ci-backup-rs-ord.openstack.org:jenkins-dev.openstack.org
+    git-server ~git\d+\.openstack\.org
+    pypi pypi.*.openstack.org
+    afsdb afsdb*.openstack.org
+    afs afs*.*.openstack.org
+
+    disabled ci-backup-rs-ord.openstack.org:jenkins-dev.openstack.org
+
+
+
 Ansible's Role
 ==============
 
