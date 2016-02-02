@@ -501,11 +501,107 @@ Run_all.sh
     * Think about this relatively infrequently -> CI
 
 
+Puppet + Ansible
+================
+
+* Copy code
+* Copy secrets
+* Inject variables
+* Run puppet
+* Save report
+* Push to puppetdb
+
+.. note::
+    * no use of r10k or install_modules.sh
+    * Code is rsyncd from the puppetmaster
+    * Specific hiera files are pushed, this is controlled by ansible groups
+    * Environment variables such as git refs are set using FACTER variables
+    * puppet is run
+    * report_file report processor runs, emits a json blob
+    * json blob copied back to puppet master, curl'd at puppetdb
+
+Copy code
+=========
+
+.. code-block:: yaml
+
+    - block:
+      - name: copy puppet modules
+        synchronize:
+          src: "{{ manifest_base }}/{{ puppet_environment }}"
+          dest: "{{ manifest_base }}"
+
+Copy secrets
+============
+
+.. code-block:: yaml
+
+  - name: make file list
+    puppet_get_hiera_file_list:
+      fqdn: "{{ ansible_fqdn }}"
+      groups: "{{ hostvars[inventory_hostname].group_names }}"
+      location: "{{ hieradata }}/{{ puppet_environment }}"
+    delegate_to: localhost
+    register: hiera_file_paths
+
+  - name: copy hiera files
+    copy:
+      src: "{{ item }}"
+      dest: "{{ item }}"
+      mode: 0600
+    with_items: hiera_file_paths.paths|default()
+
+
+Run Puppet
+==========
+
+.. code-block:: yaml
+
+    - name: run puppet
+      puppet:
+        puppetmaster: "{{ puppetmaster|default(omit) }}"
+        manifest: "{{ manifest|default(omit) }}"
+        show_diff: "{{ show_diff|default(false) }}"
+        facts: "{{ facts|default(omit) }}"
+        facter_basename: "{{ facter_basename|default(omit) }}"
+
+
+Post report and facts to puppetdb
+==================================
+
+.. code-block:: yaml
+
+  - name: find logs
+    shell: "ls -tr /var/lib/puppet/reports/{{ ansible_fqdn }}/*_puppetdb.json"
+    register: files
+
+  - name: set log filename
+    set_fact: puppet_logfile="{{ files.stdout_lines|sort|last }}"
+
+  - name: fetch file
+    synchronize:
+      mode: pull
+      src: "{{ puppet_logfile }}"
+      dest: /var/lib/puppet/reports/{{ ansible_fqdn }}
+
+  - name: post facts
+    puppet_post_puppetdb:
+      puppetdb: "{{ puppetdb }}"
+      hostvars: "{{ hostvars[inventory_hostname] }}"
+      logfile: "{{ puppet_logfile }}"
+      whoami: "{{ ansible_fqdn }}"
+    delegate_to: localhost
+    connection: local
+
+
+
+
 References
 ==========
 
 * All infra repos: http://git.openstack.org/cgit/openstack-infra/
 * Main Control repo: http://git.openstack.org/cgit/openstack-infra/system-config
+* ansible-puppet role: http://git.openstack.org/cgit/openstack-infra/system-config
 * Apply test: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
 * OpenStack CI http://docs.openstack.org/infra/openstackci/
 * Diskimage-Builder http://docs.openstack.org/developer/diskimage-builder/
@@ -535,7 +631,7 @@ IBM
 
 nibz@spencerkrum.com
 
-https://github.com/nibalizer/talk-thirdpartyci
+https://github.com/nibalizer/talk-better_together
 
 
 
