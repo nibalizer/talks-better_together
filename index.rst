@@ -71,6 +71,7 @@ History
     * pre ansible (python shop)
     * tried chef, hard
     * went with puppet
+    * Heavy CI/CD culture, everything goes through git, delpoy - grafana
 
 Primary Services
 ================
@@ -218,13 +219,75 @@ Upgrades to the puppet setup: OpenStackCI
     * All-in-one node deployment
 
 
+Need basic orchestration
+========================
+
+.. code-block:: shell
+
+    commit b55ed05a274e5da40b567ad127a3d1c5808e48c6
+    Author: Monty Taylor <mordred@inaugust.com>
+    Date:   Mon Mar 17 04:01:33 2014 -0400
+
+        Drive puppet from the master over ssh
+        
+        We'd like to be able to control sequencing of how and when puppet
+        runs across our machines. Currently, it's just a set of agents
+        that run kinda whenever they run. At times they hang and we don't
+        know about it. Also, cross-server sequencing is impossible to
+        achieve.
+        
+        Change the operation away from agents running on the machine as
+        daemons, and instead ssh from the master to each machine.
+        
+        Change-Id: I76e41e63c6d0825e8735c484ba4580d545515e43
+
+.. note::
+    * /opt/config/production/run_all.sh
+    * 'override hosts'
+    * gave us limited Do X before Y
+    * create repos in git slaves before creating them in the git master
+    * replication in the git-master is a bit derpy
+
+
+Need basic orchestration
+========================
+
+.. code-block:: shell
+
+    commit 034f37c32aed27d8000e1dc3a8a3d36022bcd12a
+    Author: Monty Taylor <mordred@inaugust.com>
+    Date:   Tue Apr 15 17:41:45 2014 -0700
+
+        Use ansible instead of direct ssh calls
+        
+        Instead of a shell script looping over ssh calls, use a simple
+        ansible playbook. The benefit this gets is that we can then also
+        script ad-hoc admin tasks either via playbooks or on the command
+        line. We can also then get rid of the almost entirely unused
+        salt infrastructure.
+        
+        Change-Id: I53112bd1f61d94c0521a32016c8a47c8cf9e50f7
+
+.. note::
+    * Yes there was a ancient salt infra crusting
+
+
 
 References
 ==========
 
 * All infra repos: http://git.openstack.org/cgit/openstack-infra/
+* Main Control repo: http://git.openstack.org/cgit/openstack-infra/system-config
 * Apply test: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
 * OpenStack CI http://docs.openstack.org/infra/openstackci/
+
+
+References: shas
+================
+
+* Drive puppet from ssh edaa31ebbda09fb03baf1d18b64f5fa996188745
+* Move from ssh to ansible: 034f37c32aed27d8000e1dc3a8a3d36022bcd12a
+
 
 
 Thank You
