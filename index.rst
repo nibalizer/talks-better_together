@@ -594,7 +594,7 @@ PuppetBoard
 ===========
 
 
-.. figure:: _static/puppetboard.jpg
+.. figure:: _static/puppetboard.png
    :align: center
 
 
@@ -615,8 +615,13 @@ References
 * Apply test: http://git.openstack.org/cgit/openstack-infra/system-config/tree/tools/apply-test.sh
 * OpenStack CI http://docs.openstack.org/infra/openstackci/
 * Diskimage-Builder http://docs.openstack.org/developer/diskimage-builder/
-* ELK Upgrade Playbook: https://review.openstack.org/#/c/238185/
 
+References (cont)
+=================
+
+* ELK Upgrade Playbook: https://review.openstack.org/#/c/238185/
+* Ansible puppetdb glue: http://git.openstack.org/cgit/openstack-infra/ansible-puppet/tree/library/puppet_post_puppetdb
+* Json puppet report processor: http://git.openstack.org/cgit/openstack-infra/system-config/tree/modules/openstack_project/lib/puppet/reports/puppetdb_file.rb
 
 References: shas
 ================
