@@ -167,6 +167,34 @@ Puppet circa 2014
     * public internet, rouge puppet certs
 
 
+Example of where we were at
+==========================
+
+.. code-block:: shell
+
+    if [ -n "$NODEPOOL_SSH_KEY" ] ; then
+        puppet_install_users="install_users => false,
+    ssh_key => '$NODEPOOL_SSH_KEY',"
+    else
+        puppet_install_users=""
+    fi
+
+    cat >/tmp/local.pp <<EOF
+    class {'openstack_project::single_use_slave':
+      sudo => $SUDO,
+      thin => $THIN,
+      install_resolv_conf => false,
+      $puppet_install_users
+    }
+    EOF
+
+    puppet apply /tmp/local.pp
+
+.. note::
+    * Some but not all of the terribleness has been preserved
+    * run this in prod
+
+
 Upgrades to the puppet setup
 ============================
 
