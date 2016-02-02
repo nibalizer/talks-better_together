@@ -247,6 +247,7 @@ Need basic orchestration
     * gave us limited Do X before Y
     * create repos in git slaves before creating them in the git master
     * replication in the git-master is a bit derpy
+    * "this allows creation of git repos on the git slaves before creation of the master repos on the gerrit server"
 
 
 Need basic orchestration
@@ -270,6 +271,27 @@ Need basic orchestration
 
 .. note::
     * Yes there was a ancient salt infra crusting
+
+
+Puppet Inventory
+================
+
+.. code-block:: shell
+
+    import json
+    import subprocess
+
+    output = [
+        x.split()[1][1:-1] for x in subprocess.check_output(
+            ["puppet","cert","list","-a"]).split('\n')
+        if x.startswith('+')
+    ]
+
+    data = {
+        '_meta': {'hostvars': dict()},
+        'ungrouped': output,
+    }
+    print json.dumps(data, sort_keys=True, indent=2)
 
 
 
