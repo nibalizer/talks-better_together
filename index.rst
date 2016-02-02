@@ -106,7 +106,7 @@ Secondary Services
 Codesearch
 ==========
 
-.. figure:: _static/codesearch.jpg
+.. figure:: _static/codesearch.png
    :align: center
 
 * http://codesearch.openstack.org
@@ -116,6 +116,7 @@ Codesearch
     * hound from etsy
     * deployed by outreachy intern
     * use our puppet module!
+    * wicked fast
 
 Basics
 ======
