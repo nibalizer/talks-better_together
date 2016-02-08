@@ -666,7 +666,7 @@ IBM
 
 nibz@spencerkrum.com
 
-https://github.com/nibalizer/talk-better_together
+https://github.com/nibalizer/talks-better_together
 
 
 
